@@ -50,9 +50,9 @@ DappGenerator.prototype.app = function app() {
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.template('Gruntfile.js');
-    //this.copy('Gruntfile.js', 'Gruntfile.js');
     this.copy('_.bowerrc', '.bowerrc');
     this.copy('_.gitignore', '.gitignore');
+    this.template('_LICENSE', 'LICENSE');
 
 };
 

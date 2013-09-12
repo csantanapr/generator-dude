@@ -19,5 +19,15 @@
     "grunt-cordovacli": "~0.1.7",
     "time-grunt": "~0.1.1",
     "load-grunt-tasks": "~0.1.0"
-  }
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/dojo/dojo/blob/master/LICENSE#L13"
+    },
+    {
+      "type": "AFLv2.1",
+      "url": "https://github.com/dojo/dojo/blob/master/LICENSE#L43"
+    }
+  ]
 }
