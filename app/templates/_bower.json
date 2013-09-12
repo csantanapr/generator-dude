@@ -1,0 +1,12 @@
+{
+  "name": "<%= _.slugify(appName) %>",
+  "version": "0.0.0",
+  "dependencies": {
+    "dojox": "dojo/dojox",
+    "dojo" : "dojo/dojo",
+    "dijit": "dojo/dijit",
+    "util" : "dojo/util",
+    "dojox_application": "dmachi/dojox_application"
+  }
+}
+
