@@ -1,7 +1,7 @@
 # generator-dapp [![Build Status](https://secure.travis-ci.org/csantanapr/generator-dapp.png?branch=master)](https://travis-ci.org/csantanapr/generator-dapp)
 
-A generator for [Yeoman](http://yeoman.io).
 
+A [Yeoman](http://yeoman.io) generator that scaffolds out a front-end web and hybrid app using dojo and cordova
 
 ## Getting Started
 
