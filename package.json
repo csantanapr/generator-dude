@@ -1,6 +1,6 @@
 {
   "name": "generator-dapp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Yeoman generator that scaffolds out a front-end web and hybrid app using dojo and cordova",
   "keywords": [
     "yeoman-generator",
@@ -43,7 +43,12 @@
   },
   "licenses": [
     {
-      "type": "MIT"
+      "type": "BSD",
+      "url": "https://github.com/dojo/dojo/blob/master/LICENSE#L13"
+    },
+    {
+      "type": "AFLv2.1",
+      "url": "https://github.com/dojo/dojo/blob/master/LICENSE#L43"
     }
   ]
 }

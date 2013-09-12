@@ -44,4 +44,7 @@ If you'd like to get to know Yeoman better and meet some of his friends, [Grunt]
 
 ## License
 
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+### Dual License
+
+* [BSD](https://github.com/dojo/dojo/blob/master/LICENSE#L13)
+* [AFLv2.1](https://github.com/dojo/dojo/blob/master/LICENSE#L43)
