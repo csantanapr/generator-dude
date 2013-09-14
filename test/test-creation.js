@@ -6,7 +6,7 @@ var path    = require('path');
 var helpers = require('yeoman-generator').test;
 
 
-describe('dapp generator', function () {
+describe('dude generator', function () {
     'use strict';
     beforeEach(function (done) {
         helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
@@ -14,7 +14,7 @@ describe('dapp generator', function () {
                 return done(err);
             }
 
-            this.app = helpers.createGenerator('dapp:app', [
+            this.app = helpers.createGenerator('dude:app', [
                 '../../app'
             ]);
             done();
@@ -36,7 +36,7 @@ describe('dapp generator', function () {
         ];
 
         helpers.mockPrompt(this.app, {
-            'appName': 'dapp'
+            'appName': 'dude'
         });
         this.app.options['skip-install'] = true;
         this.app.run({}, function () {
