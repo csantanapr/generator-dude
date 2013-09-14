@@ -30,7 +30,7 @@ DappGenerator.prototype.askFor = function askFor() {
     prompts = [{
         'name': 'appName',
         'message': 'What do you want to name your App?',
-        'default': 'dapp'
+        'default': 'dude'
     }];
 
     this.prompt(prompts, function (props) {
@@ -46,17 +46,15 @@ DappGenerator.prototype.app = function app() {
     'use strict';
     this.directory('profiles', 'profiles');
     this.directory('src', 'src');
+};
 
+DappGenerator.prototype.projectfiles = function projectfiles() {
+    'use strict';
+    this.copy('editorconfig', '.editorconfig');
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.template('Gruntfile.js');
     this.copy('_.bowerrc', '.bowerrc');
     this.copy('_.gitignore', '.gitignore');
     this.template('_LICENSE', 'LICENSE');
-
-};
-
-DappGenerator.prototype.projectfiles = function projectfiles() {
-    'use strict';
-    this.copy('editorconfig', '.editorconfig');
 };

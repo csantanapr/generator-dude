@@ -1,7 +1,7 @@
 {
-  "name": "generator-dapp",
-  "version": "0.1.2",
-  "description": "A Yeoman generator that scaffolds out a front-end web and hybrid app using dojo and cordova",
+  "name": "generator-dude",
+  "version": "0.1.3",
+  "description": "A Yeoman generator for Dojo Unified Development Environment (dude) mobile web and cordova",
   "keywords": [
     "yeoman-generator",
     "cordova",
@@ -10,10 +10,11 @@
     "yeoman",
     "bower",
     "grunt",
-    "gruntjs"
+    "gruntjs",
+    "dude"
   ],
-  "homepage": "https://github.com/csantanapr/generator-dapp",
-  "bugs": "https://github.com/csantanapr/generator-dapp/issues",
+  "homepage": "https://github.com/csantanapr/generator-dude",
+  "bugs": "https://github.com/csantanapr/generator-dude/issues",
   "author": {
     "name": "Carlos Santana",
     "email": "csantana23@gmail.com",
@@ -22,7 +23,7 @@
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/csantanapr/generator-dapp.git"
+    "url": "git://github.com/csantanapr/generator-dude.git"
   },
   "scripts": {
     "test": "mocha"

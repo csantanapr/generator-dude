@@ -1,7 +1,10 @@
 # generator-dapp [![Build Status](https://secure.travis-ci.org/csantanapr/generator-dapp.png?branch=master)](https://travis-ci.org/csantanapr/generator-dapp)
 
+Dojo Unified Development Environment (dude)
 
 A [Yeoman](http://yeoman.io) generator that scaffolds out a front-end web and hybrid app using dojo and cordova
+
+Base on Dojo Unified Development Environment (dude)
 
 ## Getting Started
 
@@ -26,14 +29,26 @@ Yeoman travels light. He didn't pack any generators when he moved in. You can th
 To install generator-dapp from npm, run:
 
 ```
-$ npm install -g generator-dapp
+$ npm install -g generator-dude
 ```
 
 Finally, initiate the generator:
 
 ```
-$ yo dapp
+$ yo dude
 ```
+
+### Then what?
+Run  `grunt --help` to see available tasks
+
+Here are a few options:
+```
+$ grunt server
+$ grunt server:dist
+$ grunt cordova
+$ grunt demo
+```
+
 
 ### Getting To Know Yeoman
 
