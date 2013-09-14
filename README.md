@@ -1,4 +1,4 @@
-# generator-dapp [![Build Status](https://secure.travis-ci.org/csantanapr/generator-dapp.png?branch=master)](https://travis-ci.org/csantanapr/generator-dapp)
+# generator-dude [![Build Status](https://secure.travis-ci.org/csantanapr/generator-dude.png?branch=master)](https://travis-ci.org/csantanapr/generator-dude)
 
 Dojo Unified Development Environment (dude)
 
