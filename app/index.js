@@ -1,11 +1,11 @@
 /*jslint nomen: true */
-/*global _, require, module, __dirname, console*/
+/*global require, module, __dirname, console*/
 var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
 var DappGenerator;
-DappGenerator = module.exports = function DappGenerator(args, options, config) {
+DappGenerator = module.exports = function DappGenerator(args, options) {
     'use strict';
     yeoman.generators.Base.apply(this, arguments);
 
@@ -14,6 +14,8 @@ DappGenerator = module.exports = function DappGenerator(args, options, config) {
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+
+    this.bowerComponents = JSON.parse(this.readFileAsString(path.join(__dirname, 'templates', '_.bowerrc'))).directory;
 };
 
 util.inherits(DappGenerator, yeoman.generators.Base);

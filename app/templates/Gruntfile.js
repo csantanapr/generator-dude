@@ -1,4 +1,5 @@
 /*global module, require */
+/*jshint camelcase: false */
 
 module.exports = function (grunt) {
     'use strict';
@@ -14,8 +15,9 @@ module.exports = function (grunt) {
             app: 'src/app',
             dist: 'dist',
             www: 'dist/www',
-            tmp: 'dist/.build',
-            cordova_path: 'dist/cordova/dApp'
+            tmp: '.tmp',
+            cordova_path: 'dist/cordova',
+            components: '<%= bowerComponents %>'
         },
         LIVERELOAD_PORT = 35729,
         lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT}),
@@ -78,8 +80,22 @@ module.exports = function (grunt) {
                 tasks: ['jshint:gruntfile']
             },
             src: {
+                options: {
+                    livereload: LIVERELOAD_PORT
+                },
                 files: '<%%= yeoman.app %>/**',
                 tasks: ['lint']
+            },
+            dist: {
+                options: {
+                    livereload: LIVERELOAD_PORT
+                },
+                files: '<%%= yeoman.app %>/**',
+                tasks: ['build']
+            },
+            cordova: {
+                files: '<%%= yeoman.app %>/**',
+                tasks: ['web_build', 'cordova_build', 'emulate']
             }
         },
         dojo: {
@@ -92,7 +108,7 @@ module.exports = function (grunt) {
             },
             options: {
                 // You can also specify options to be used in all your tasks
-                dojo: 'components/dojo/dojo.js', // Path to dojo.js file in dojo source
+                dojo: '<%%= yeoman.components %>/dojo/dojo.js', // Path to dojo.js file in dojo source
                 load: 'build' // Optional: Utiltbootstrap (Default:
             }
         },
@@ -134,9 +150,9 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'components/dojox_application',
+                        cwd: '<%%= yeoman.components %>/dojox_application',
                         src: ['**'],
-                        dest: 'components/dojox/app'
+                        dest: '<%%= yeoman.components %>/dojox/app'
                     }
                 ]
             },
@@ -220,8 +236,8 @@ module.exports = function (grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%%= yeoman.dist %>/*',
-                        '!<%%= yeoman.dist %>/.git*'
+                        '<%%= yeoman.tmp %>',
+                        '<%%= yeoman.dist %>'
                     ]
                 }]
             },
@@ -229,8 +245,7 @@ module.exports = function (grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%%= yeoman.cordova_path %>/*',
-                        '!<%%= yeoman.cordova_path %>/.git*'
+                        '<%%= yeoman.cordova_path %>'
                     ]
                 }]
             }
@@ -255,6 +270,7 @@ module.exports = function (grunt) {
                 options: {
                     middleware: function (connect) {
                         return [
+                            lrSnippet,
                             mountFolder(connect, yeomanConfig.www)
                         ];
                     }
@@ -277,7 +293,7 @@ module.exports = function (grunt) {
     //Linting tasks
     grunt.registerTask('lint', ['jshint', 'jslint', 'csslint', 'htmlhint']);
     //web dev tasks
-    grunt.registerTask('web_build', ['lint', 'cpdxapp', 'dojo', 'copy:web_index', 'copy:web']);
+    grunt.registerTask('web_build', ['cpdxapp', 'lint', 'dojo', 'copy:web_index', 'copy:web']);
     //main build tasks
     grunt.registerTask('build_all', ['web_build', 'cordova']);
     grunt.registerTask('default', ['build']);
@@ -289,42 +305,60 @@ module.exports = function (grunt) {
         } else {
             grunt.task.run(['web_build']);
         }
-
-
     });
     //livereload server tasks server or server:dist
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
-            return grunt.task.run(['web_build', 'open:dist', 'connect:dist:keepalive']);
+            grunt.task.run([
+                'web_build',
+                'connect:dist',
+                'open:dist',
+                'watch:dist'
+            ]);
+        } else if (target === 'cordova') {
+            grunt.task.run([
+                'build:all',
+                'emulate',
+                'watch:cordova'
+            ]);
+        } else {
+            grunt.task.run([
+                'cpdxapp',
+                'lint',
+                'connect:livereload',
+                'open:server',
+                'watch:src'
+            ]);
         }
-
-        grunt.task.run([
-            'cpdxapp',
-            'lint',
-            'connect:livereload',
-            'open:server',
-            'watch'
-        ]);
+    });
+    // start emulator, install app
+    grunt.registerTask('emulate', function (target) {
+        if (target === 'ios') {
+            grunt.task.run(['cordovacli:emulate_ios']);
+        } else if (target === 'android') {
+            grunt.task.run(['cordovacli:emulate_android']);
+        } else {
+            grunt.task.run(['cordovacli:emulate_android']);
+        }
     });
 
     //Apache Cordova tasks
     grunt.registerTask('cordova_create', ['clean:cordova', 'cordovacli:create', 'cordovacli:platform']);
     grunt.registerTask('cordova_build', ['copy:cordova', 'cordovacli:build']);
     grunt.registerTask('cordova', ['cordova_create', 'cordova_build']);
-    grunt.registerTask('cordova_emulate', ['cordova_build', 'cordovacli:emulate_ios', 'cordovacli:emulate_android']);
-    grunt.registerTask('demo', ['build_all', 'cordovacli:emulate_android']);
+    grunt.registerTask('demo', ['build_all', 'emulate']);
 
 
-    //components/dojox_application needs to be present in components/dojox/app
+    //<%= yeoman.components %>/dojox_application needs to be present in <%= yeoman.components %>/dojox/app
     grunt.task.registerTask('cpdxapp', 'Copies dojox_application to dojox/app', function () {
         var check;
 
-        check = "components/dojox/app/main.js";
+        check = (yeomanConfig.components + '/dojox/app/main.js');
 
         if (grunt.file.exists(check)) {
-            grunt.log.writeln(check + " exists, no copy necessary");
+            grunt.log.writeln(check + ' exists, no copy necessary');
         } else {
-            grunt.log.writeln(check + " does not exists, doing copy ");
+            grunt.log.writeln(check + ' does not exists, doing copy');
             grunt.task.run(['copy:web_dojox_app_hack']);
         }
 
