@@ -291,15 +291,17 @@ module.exports = function (grunt) {
     // Default task.
 
     //Linting tasks
-    grunt.registerTask('lint', ['jshint', 'jslint', 'csslint', 'htmlhint']);
+    grunt.registerTask('lint', ['cpdxapp', 'jshint', 'jslint', 'csslint', 'htmlhint']);
     //web dev tasks
-    grunt.registerTask('web_build', ['cpdxapp', 'lint', 'dojo', 'copy:web_index', 'copy:web']);
+    grunt.registerTask('web_build', ['lint', 'dojo', 'copy:web_index', 'copy:web']);
     //main build tasks
     grunt.registerTask('build_all', ['web_build', 'cordova']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('build', function (target) {
         if (target === 'all') {
             grunt.task.run(['build_all']);
+        } else if (target === 'dist' || target === 'web') {
+            grunt.task.run(['web_build']);
         } else if (target === 'cordova') {
             grunt.task.run(['cordova_build']);
         } else {
@@ -308,9 +310,9 @@ module.exports = function (grunt) {
     });
     //livereload server tasks server or server:dist
     grunt.registerTask('server', function (target) {
-        if (target === 'dist') {
+        if (target === 'dist' || target === 'web') {
             grunt.task.run([
-                'web_build',
+                'build:web',
                 'connect:dist',
                 'open:dist',
                 'watch:dist'
@@ -323,7 +325,6 @@ module.exports = function (grunt) {
             ]);
         } else {
             grunt.task.run([
-                'cpdxapp',
                 'lint',
                 'connect:livereload',
                 'open:server',
