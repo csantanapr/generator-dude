@@ -1,16 +1,36 @@
 /*jslint nomen: true */
 /*global require, module, __dirname, console*/
-var util = require('util');
-var path = require('path');
+var util   = require('util');
+var path   = require('path');
 var yeoman = require('yeoman-generator');
+//var fs     = require('fs');
 
 var DappGenerator;
 DappGenerator = module.exports = function DappGenerator(args, options) {
     'use strict';
     yeoman.generators.Base.apply(this, arguments);
+    var that = this;
 
     this.on('end', function () {
-        this.installDependencies({ skipInstall: options['skip-install'] });
+        var cwd = process.cwd();
+        var cordovaPath = process.cwd() + '/cordova';
+        console.log('cordovaPath=' + cordovaPath);
+        this.mkdir(cordovaPath);
+        process.chdir(cordovaPath);
+        this.env.run('cordovacli',
+            { 'skip-welcome-message': true,
+              'skip-install': options['skip-install'],
+              'skip-install-message': true
+            },
+            function () {
+                process.chdir(cwd);
+                that.installDependencies({
+                    skipInstall: options['skip-install'],
+                    'skip-install-message': false
+                });
+            });
+
+
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -38,6 +58,8 @@ DappGenerator.prototype.askFor = function askFor() {
     this.prompt(prompts, function (props) {
         // `props` is an object passed in containing the response values, named in
         // accordance with the `name` property from your prompt object. So, for us:
+        //var cwd = process.cwd();
+
         this.appName = props.appName;
 
         cb();
@@ -46,8 +68,11 @@ DappGenerator.prototype.askFor = function askFor() {
 
 DappGenerator.prototype.app = function app() {
     'use strict';
+
     this.directory('profiles', 'profiles');
     this.directory('src', 'src');
+
+
 };
 
 DappGenerator.prototype.projectfiles = function projectfiles() {
