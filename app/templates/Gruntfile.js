@@ -11,13 +11,8 @@ module.exports = function (grunt) {
 
     // configurable paths
     var yeomanConfig = {
-            src: 'src',
             app: 'src/app',
-            dist: 'dist',
-            www: 'dist/www',
-            tmp: '.tmp',
-            cordova_path: 'dist/cordova',
-            components: '<%= bowerComponents %>'
+            dist: 'dist'
         },
         LIVERELOAD_PORT = 35729,
         lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT}),
@@ -174,8 +169,8 @@ module.exports = function (grunt) {
             create: {
                 options: {
                     command: 'create',
-                    id: 'com.<%= _.slugify(appName) %>', //optional
-                    name: '<%= _.slugify(appName) %>'    //optional
+                    id: 'foo', //optional
+                    name: 'foo'    //optional
                 }
             },
             platform: {

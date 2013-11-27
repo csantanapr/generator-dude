@@ -9,25 +9,54 @@ var DappGenerator;
 DappGenerator = module.exports = function DappGenerator(args, options) {
     'use strict';
     yeoman.generators.Base.apply(this, arguments);
-    var that = this;
+
 
     this.on('end', function () {
-        var cwd = process.cwd();
-        var cordovaPath = process.cwd() + '/cordova';
-        console.log('cordovaPath=' + cordovaPath);
+        var cwd;
+        var cordovaPath;
+        var webPath;
+        var genCordovaCLI;
+        var genWeb;
+        var genDude;
+
+        genDude = this;
+        cwd = process.cwd();
+        cordovaPath = process.cwd() + '/cordova';
+        webPath = process.cwd() + '/app';
+
         this.mkdir(cordovaPath);
-        process.chdir(cordovaPath);
-        this.env.run('cordovacli',
-            { 'skip-welcome-message': true,
-              'skip-install': options['skip-install'],
-              'skip-install-message': true
-            },
+        this.mkdir(webPath);
+
+        process.chdir(webPath);
+        genWeb = this.env.run('dapp',
+            { 'skip-install': true},
             function () {
-                process.chdir(cwd);
-                that.installDependencies({
-                    skipInstall: options['skip-install'],
-                    'skip-install-message': false
-                });
+                console.log('done with web generator');
+                process.chdir(cordovaPath);
+                genCordovaCLI = this.env.run('cordovacli',
+                            { 'skip-install': true},
+                            function () {
+                                process.chdir(webPath);
+                                genWeb.installDependencies({
+                                        skipInstall: options['skip-install'],
+                                        skipMessage: true,
+                                        callback: function () {
+                                            process.chdir(cordovaPath);
+                                            genCordovaCLI.installDependencies({
+                                                skipInstall: options['skip-install'],
+                                                skipMessage: true,
+                                                callback: function () {
+                                                    process.chdir(cwd);
+                                                    genDude.installDependencies({
+                                                        skipInstall: options['skip-install'],
+                                                        bower: false
+                                                    });
+                                                }
+                                            });
+
+                                        }
+                                    });
+                            });
             });
 
 
@@ -35,7 +64,7 @@ DappGenerator = module.exports = function DappGenerator(args, options) {
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 
-    this.bowerComponents = JSON.parse(this.readFileAsString(path.join(__dirname, 'templates', '_.bowerrc'))).directory;
+
 };
 
 util.inherits(DappGenerator, yeoman.generators.Base);
@@ -60,8 +89,6 @@ DappGenerator.prototype.askFor = function askFor() {
         // accordance with the `name` property from your prompt object. So, for us:
         //var cwd = process.cwd();
 
-        this.appName = props.appName;
-
         cb();
     }.bind(this));
 };
@@ -69,19 +96,12 @@ DappGenerator.prototype.askFor = function askFor() {
 DappGenerator.prototype.app = function app() {
     'use strict';
 
-    this.directory('profiles', 'profiles');
-    this.directory('src', 'src');
-
-
 };
 
 DappGenerator.prototype.projectfiles = function projectfiles() {
     'use strict';
     this.copy('editorconfig', '.editorconfig');
-    this.template('_package.json', 'package.json');
-    this.template('_bower.json', 'bower.json');
+    this.copy('_package.json', 'package.json');
     this.template('Gruntfile.js');
-    this.copy('_.bowerrc', '.bowerrc');
     this.copy('_.gitignore', '.gitignore');
-    this.template('_LICENSE', 'LICENSE');
 };
