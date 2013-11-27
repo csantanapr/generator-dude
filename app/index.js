@@ -3,10 +3,10 @@
 var util   = require('util');
 var path   = require('path');
 var yeoman = require('yeoman-generator');
-//var fs     = require('fs');
+var cprocess     = require('child_process');
 
-var DappGenerator;
-DappGenerator = module.exports = function DappGenerator(args, options) {
+var DudeGenerator;
+DudeGenerator = module.exports = function DudeGenerator(args, options) {
     'use strict';
     yeoman.generators.Base.apply(this, arguments);
 
@@ -28,7 +28,8 @@ DappGenerator = module.exports = function DappGenerator(args, options) {
         this.mkdir(webPath);
 
         process.chdir(webPath);
-        genWeb = this.env.run('dapp',
+        console.log('Running Generator' + this.webGenerator);
+        genWeb = this.env.run(this.webGenerator,
             { 'skip-install': true},
             function () {
                 console.log('done with web generator');
@@ -49,7 +50,23 @@ DappGenerator = module.exports = function DappGenerator(args, options) {
                                                     process.chdir(cwd);
                                                     genDude.installDependencies({
                                                         skipInstall: options['skip-install'],
-                                                        bower: false
+                                                        bower: false,
+                                                        callback: function () {
+                                                            var child;
+                                                            console.log('Running Grunt');
+                                                            process.chdir(cordovaPath);
+                                                            child = cprocess.spawn('grunt', ['cordovacli:cordova']);
+
+                                                            child.stdout.setEncoding('utf8');
+                                                            child.stdout.on('data', function (data) {
+                                                                console.log(data);
+                                                            });
+
+                                                            child.stderr.setEncoding('utf8');
+                                                            child.stderr.on('data', function (data) {
+                                                                console.error(data);
+                                                            });
+                                                        }
                                                     });
                                                 }
                                             });
@@ -67,41 +84,67 @@ DappGenerator = module.exports = function DappGenerator(args, options) {
 
 };
 
-util.inherits(DappGenerator, yeoman.generators.Base);
+util.inherits(DudeGenerator, yeoman.generators.Base);
 
-DappGenerator.prototype.askFor = function askFor() {
+DudeGenerator.prototype.askFor = function askFor() {
     'use strict';
     var cb,
         prompts;
     cb = this.async();
 
-    // have Yeoman greet the user.
-    console.log(this.yeoman);
-
     prompts = [{
-        'name': 'appName',
-        'message': 'What do you want to name your App?',
-        'default': 'dude'
-    }];
+        type: 'list',
+        name: 'webGenerator',
+        message: 'Must be already installed globally with npm install -g\nSelect a Web App Generator?',
+        choices: [{
+                name: 'generator-dapp          (github.com/csantanapr/generator-dapp)',
+                value: 'dapp'
+            },
+            {
+                name: 'generator-webapp        (github.com/yeoman/generator-webapp)',
+                value: 'webapp'
+            },
+            {
+                name: 'generator-angular       (github.com/yeoman/generator-angular)',
+                value: 'angular'
+            },
+            {
+                name: 'generator-mobile        (github.com/yeoman/generator-mobile)',
+                value: 'mobile'
+            },
+            {
+                name: 'generator-polymer       (github.com/yeoman/generator-polymer)',
+                value: 'polymer'
+            },
+            {
+                name: 'generator-backbone      (github.com/yeoman/generator-backbone)',
+                value: 'backbone'
+            },
+            {
+                name: 'generator-jquery-mobile (github.com/bauschan/generator-jquery-mobile)',
+                value: 'jquery-mobile'
+            }]
+        }];
+
 
     this.prompt(prompts, function (props) {
-        // `props` is an object passed in containing the response values, named in
-        // accordance with the `name` property from your prompt object. So, for us:
-        //var cwd = process.cwd();
+
+        this.webGenerator = props.webGenerator;
 
         cb();
     }.bind(this));
 };
 
-DappGenerator.prototype.app = function app() {
+DudeGenerator.prototype.app = function app() {
     'use strict';
 
 };
 
-DappGenerator.prototype.projectfiles = function projectfiles() {
+DudeGenerator.prototype.projectfiles = function projectfiles() {
     'use strict';
     this.copy('editorconfig', '.editorconfig');
     this.copy('_package.json', 'package.json');
     this.template('Gruntfile.js');
     this.copy('_.gitignore', '.gitignore');
 };
+
