@@ -32,11 +32,14 @@ module.exports = function (grunt) {
                 src: '**',
                 dest: '<%%= yeoman.dist %>'
             }
-            
         },
         watch: {
             dude: {
-                files: ['app/app/**', 'app/src/**'],
+                files: [
+                    'app/src/app/**',
+                    'app/app/**',
+                    '!app/app/bower_components/**'
+                ],
                 tasks: ['app:build', 'copy:dude', 'cordova:build', 'cordova:emulate']
             }
         }
@@ -46,16 +49,16 @@ module.exports = function (grunt) {
     // Default task.
     grunt.registerTask('default', 'Default task', function () {
         grunt.log.writeln(['Run App grunt task using grunt app:x, x is server, build, etc..']);
-        grunt.log.writeln(['app:server','app:build']);
+        grunt.log.writeln(['app:server', 'app:build']);
         grunt.log.writeln(['------------------------------------------------------------------------']);
         grunt.log.writeln(['Run Cordova grunt task using grunt cordova:x, x is build, emulate, etc..']);
-        grunt.log.writeln(['cordova:build','cordova:emulate','cordova:server']);
+        grunt.log.writeln(['cordova:build', 'cordova:emulate', 'cordova:server']);
         grunt.log.writeln(['------------------------------------------------------------------------']);
         grunt.log.writeln(['Run Dude tasks:']);
         grunt.log.writeln(['server, build']);
     });
 
-    
+
     grunt.registerTask('app', function (target) {
         runGrunt(target, grunt, './app', this.async());
     });
@@ -63,15 +66,16 @@ module.exports = function (grunt) {
         runGrunt(target, grunt, './cordova', this.async());
     });
 
-    
+
     grunt.registerTask('build', ['app:build', 'copy', 'cordova:build']);
     grunt.registerTask('server', ['app:build', 'copy:dude', 'cordova:build', 'cordova:emulate', 'watch:dude']);
-    
+
     grunt.registerTask('lint', ['jslint']);
 
 
 };
 runGrunt = function (target, grunt, path, done) {
+    'use strict';
     var options, child;
 
     options = {
