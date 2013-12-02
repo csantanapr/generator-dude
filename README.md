@@ -1,10 +1,8 @@
 # generator-dude [![Build Status](https://secure.travis-ci.org/csantanapr/generator-dude.png?branch=master)](https://travis-ci.org/csantanapr/generator-dude)
 
-Dojo Unified Development Environment (dude)
 
-A [Yeoman](http://yeoman.io) generator that scaffolds out a front-end web and hybrid app using dojo and cordova
+A [Yeoman](http://yeoman.io) generator that scaffolds out a front-end web and hybrid app using a selected web app generator and cordova
 
-Base on Dojo Unified Development Environment (dude)
 
 ## Getting Started
 
@@ -42,13 +40,29 @@ $ yo dude
 Run  `grunt --help` to see available tasks
 
 Here are a few options:
+
 ```
 $ grunt server
-$ grunt server:dist
-$ grunt cordova
-$ grunt demo
+$ grunt build
+$ grunt app:server
+$ grunt app:build
+$ grunt cordova:server
+$ grunt cordova:build
+$ grunt cordova:emulate
 ```
 
+The Generator is based on other generators:
+The user selects one of the Web App Generators:
+
+- [generator-dapp](github.com/csantanapr/generator-dapp)
+- [generator-webapp](github.com/yeoman/generator-webapp)
+- [generator-angular](github.com/yeoman/generator-angular)
+- [generator-mobile](github.com/yeoman/generator-mobile)
+- [generator-polymer](github.com/yeoman/generator-polymer)
+- [generator-backbone](github.com/yeoman/generator-backbone)
+- [generator-jquery-mobile](github.com/bauschan/generator-jquery-mobile)
+
+Then the [generator-cordovacli](github.com/csantanapr/generator-cordovacli) is used to wrap the Web App as a Hybrid App
 
 ### Getting To Know Yeoman
 
