@@ -1,6 +1,6 @@
 {
   "name": "generator-dude",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A Yeoman generator for mobile web and cordova",
   "keywords": [
     "yeoman-generator",
