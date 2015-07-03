@@ -34,7 +34,7 @@ DudeGenerator = module.exports = function DudeGenerator(args, options) {
             function () {
                 console.log('done with web generator');
                 process.chdir(cordovaPath);
-                genCordovaCLI = this.env.run('cordovacli',
+                        genCordovaCLI = genDude.env.run('cordovacli',
                             { 'skip-install': true},
                             function () {
                                 process.chdir(webPath);
